@@ -21,7 +21,7 @@
 ![badge-support-js-ir]
 ![badge-support-linux-arm]
 
-A Kotlin Multiplatform library for obtaining cryptographically secure random data.
+A Kotlin Multiplatform library for procuring cryptographically secure random data.
 
 The Linux/AndroidNative implementation was heavily inspired by [rust-random/getrandom][url-rust-random].
 
