@@ -18,18 +18,17 @@
 package org.kotlincrypto.random.internal
 
 import kotlinx.cinterop.*
-import platform.Security.SecRandomCopyBytes
-import platform.Security.kSecRandomDefault
 import org.kotlincrypto.random.RandomnessProcurementException
+import platform.CoreCrypto.CCRandomGenerateBytes
+import platform.CoreCrypto.kCCSuccess
 
 @Throws(RandomnessProcurementException::class)
 internal actual fun ByteArray.cryptoRandFill() {
     @OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
     val status = usePinned { pinned ->
-        // kSecRandomDefault is synonymous to NULL
-        SecRandomCopyBytes(kSecRandomDefault, size.toUInt().convert(), pinned.addressOf(0))
+        CCRandomGenerateBytes(pinned.addressOf(0), size.toUInt().convert())
     }
 
-    if (status == 0) return
-    throw RandomnessProcurementException("Failed to obtain bytes from [SecRandomCopyBytes]. Code: $status")
+    if (status == kCCSuccess) return
+    throw RandomnessProcurementException("Failed to obtain bytes from [CCRandomGenerateBytes]. kCCStatus: $status")
 }
