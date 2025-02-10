@@ -49,9 +49,10 @@ public abstract class CryptoRand @DelicateCryptoRandApi protected constructor() 
      *      - Node: [Crypto.randomFillSync()](https://nodejs.org/api/crypto.html#cryptorandomfillsyncbuffer-offset-size)
      *  - WasmWasi: [random_get](https://github.com/WebAssembly/WASI/blob/main/legacy/preview1/docs.md#random_get)
      *  - Native:
-     *      - Android Native targets: [getrandom(2)](https://www.man7.org/linux/man-pages/man2/getrandom.2.html). If unavailable, `/dev/urandom` is used.
-     *      - Linux targets: [getrandom(2)](https://www.man7.org/linux/man-pages/man2/getrandom.2.html). If unavailable, `/dev/urandom` is used.
-     *      - Apple targets: [SecRandomCopyBytes](https://developer.apple.com/documentation/security/1399291-secrandomcopybytes)
+     *      - Linux & Android Native targets: [getrandom(2)](https://www.man7.org/linux/man-pages/man2/getrandom.2.html)
+     *        when available (GLIBC 2.25+ & Android API 23+), with a fallback to reading from `/dev/urandom` after polling
+     *        `/dev/random` once (per process lifetime) to ensure appropriate levels of system entropy are had.
+     *      - Apple targets: [CCRandomGenerateBytes](https://github.com/apple-oss-distributions/CommonCrypto/blob/main/include/CommonRandom.h)
      *      - Windows targets: [BCryptGenRandom](https://learn.microsoft.com/en-us/windows/win32/api/bcrypt/nf-bcrypt-bcryptgenrandom)
      * */
     public companion object Default: CryptoRand() {

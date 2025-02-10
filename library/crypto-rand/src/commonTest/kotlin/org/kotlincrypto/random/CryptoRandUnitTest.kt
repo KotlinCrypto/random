@@ -23,31 +23,33 @@ open class CryptoRandUnitTest {
 
     protected open val cryptoRand: CryptoRand = CryptoRand.Default
 
+    private companion object {
+        private const val LIMIT_LINUX = 256
+        private const val LIMIT_WEB = 65536
+    }
+
     // https://github.com/briansmith/ring/blob/main/tests/rand_tests.rs
     @Test
     fun givenArray_whenNextBytes_thenIsFilledWithData() {
-        val linuxLimit = 256
-        val webLimit = 65536
-
         listOf(
             1,
             2,
             3,
             96,
-            linuxLimit - 1,
-            linuxLimit,
-            linuxLimit + 1,
-            linuxLimit * 2,
+            LIMIT_LINUX - 1,
+            LIMIT_LINUX,
+            LIMIT_LINUX + 1,
+            LIMIT_LINUX * 2,
             511,
             512,
             513,
             4096,
-            webLimit - 1,
-            webLimit,
-            webLimit + 1,
-            webLimit * 2,
+            LIMIT_WEB - 1,
+            LIMIT_WEB,
+            LIMIT_WEB + 1,
+            LIMIT_WEB * 2,
             // To ensure remainder logic is working properly for JS/WasmJS
-            (webLimit * 2) + 6_000,
+            (LIMIT_WEB * 2) + 6_000,
         ).forEach { size ->
             val zeroCount = cryptoRand.nextBytes(buf = ByteArray(size)).count { it == 0.toByte() }
 
