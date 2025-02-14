@@ -20,8 +20,6 @@ plugins {
 kmpConfiguration {
     configureShared(java9ModuleName = "org.kotlincrypto.random", publish = true) {
         common {
-            pluginIds("dokka")
-
             sourceSetMain {
                 dependencies {
                     api(libs.kotlincrypto.error)
