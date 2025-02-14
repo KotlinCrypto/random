@@ -17,11 +17,12 @@ import io.matthewnelson.kmp.configuration.extension.KmpConfigurationExtension
 import io.matthewnelson.kmp.configuration.extension.container.target.KmpConfigurationContainerDsl
 import org.gradle.api.Action
 import org.gradle.api.JavaVersion
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 fun KmpConfigurationExtension.configureShared(
     java9ModuleName: String? = null,
     publish: Boolean = false,
-    action: Action<KmpConfigurationContainerDsl>
+    action: Action<KmpConfigurationContainerDsl>,
 ) {
     if (publish) {
         require(!java9ModuleName.isNullOrBlank()) { "publications must specify a module-info name" }
@@ -46,12 +47,14 @@ fun KmpConfigurationExtension.configureShared(
                 nodejs()
             }
         }
+        @OptIn(ExperimentalWasmDsl::class)
         wasmJs {
             target {
                 browser()
                 nodejs()
             }
         }
+        @OptIn(ExperimentalWasmDsl::class)
         wasmWasi {
             target {
                 nodejs()

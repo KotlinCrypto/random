@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT")
+@file:Suppress("ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT", "KotlinRedundantDiagnosticSuppress")
 
 package org.kotlincrypto.random.internal
 
-import org.khronos.webgl.Uint8Array
-import org.khronos.webgl.get
-import org.khronos.webgl.set
 import org.kotlincrypto.random.RandomnessProcurementException
 
 private const val BUFFER_SIZE = 1024 * 8
@@ -30,6 +27,20 @@ private external class Crypto: JsAny {
     // Node.js
     fun randomFillSync(buf: Uint8Array)
 }
+
+private open external class Uint8Array(length: Int) {
+    fun subarray(start: Int, end: Int): Uint8Array
+}
+
+@Suppress("UNUSED_PARAMETER")
+private fun uint8ArrayGet(obj: Uint8Array, index: Int): Byte { js("return obj[index];") }
+@Suppress("NOTHING_TO_INLINE")
+private inline operator fun Uint8Array.get(index: Int): Byte = uint8ArrayGet(this, index)
+
+@Suppress("UNUSED_PARAMETER")
+private fun uint8ArraySet(obj: Uint8Array, index: Int, value: Byte) { js("obj[index] = value;") }
+@Suppress("NOTHING_TO_INLINE")
+private inline operator fun Uint8Array.set(index: Int, value: Byte) { uint8ArraySet(this, index, value) }
 
 private fun isNodeJs(): Boolean = js(
 """

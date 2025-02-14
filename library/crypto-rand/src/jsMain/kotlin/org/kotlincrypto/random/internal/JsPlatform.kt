@@ -17,7 +17,6 @@
 
 package org.kotlincrypto.random.internal
 
-import org.khronos.webgl.Uint8Array
 import org.kotlincrypto.random.RandomnessProcurementException
 
 private const val BUFFER_SIZE = 1024 * 8
@@ -27,6 +26,10 @@ private external class Crypto {
     fun getRandomValues(array: dynamic)
     // Node.js
     fun randomFillSync(buf: dynamic)
+}
+
+private open external class Uint8Array(length: Int) {
+    fun subarray(start: Int, end: Int): Uint8Array
 }
 
 private fun isNodeJs(): Boolean = js(
