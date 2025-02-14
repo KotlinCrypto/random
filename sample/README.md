@@ -1,4 +1,4 @@
-# SecureRandom Sample App
+# CryptoRand Sample App
 
 Simple application that will use `CryptoRand.Default` to generate and then print random bytes.
 
