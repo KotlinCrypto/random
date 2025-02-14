@@ -21,27 +21,32 @@ import org.kotlincrypto.random.internal.cryptoRandFill
 
 /**
  * A source for obtaining random data from the system, suitable for use in cryptographic
- * operations and/or seeding random number generators (RNGs).
- *
- * e.g. (Seeding a Random Number Generator)
- *
- *     val rng = Random(
- *         seed = CryptoRand.Default.nextBytes(ByteArray(Long.SIZE_BYTES))
- *             // Using KotlinCrypto/bitops endian library
- *             // to convert 8 bytes to a Long
- *             .beLongAt(0)
- *     )
+ * operations and/or seeding of Pseudorandom Number Generators (PRNGs).
  *
  * @see [Default]
  * */
 public abstract class CryptoRand @DelicateCryptoRandApi protected constructor() {
 
     /**
+     * Fills the provided [buf] array with securely generated random data, procured from system
+     * sources. If the underlying system has not collected enough entropy yet, this function
+     * may block.
+     *
+     * **NOTE:** [buf] is modified in place, whereby any [RandomnessProcurementException] thrown
+     * may leave [buf] partially filled. It **must** be discarded in that event.
+     *
+     * @param [buf] the array to fill
+     * @return [buf]
+     * @throws [RandomnessProcurementException] if the underlying API fails
+     * */
+    public abstract fun nextBytes(buf: ByteArray): ByteArray
+
+    /**
      * The default implementation of [CryptoRand].
      *
      * The following APIs are used for procuring cryptographically secure random data:
-     *  - JVM: [java.security.SecureRandom](https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html)
-     *  - JS:
+     *  - Jvm: [java.security.SecureRandom](https://docs.oracle.com/javase/8/docs/api/java/security/SecureRandom.html)
+     *  - Js:
      *      - Browser: [Crypto.getRandomValues()](https://developer.mozilla.org/docs/Web/API/Crypto/getRandomValues)
      *      - Node: [Crypto.randomFillSync()](https://nodejs.org/api/crypto.html#cryptorandomfillsyncbuffer-offset-size)
      *  - WasmJs:
@@ -66,18 +71,4 @@ public abstract class CryptoRand @DelicateCryptoRandApi protected constructor() 
         /** @suppress */
         public override fun toString(): String = "CryptoRand.Default"
     }
-
-    /**
-     * Fills the provided [buf] array with securely generated random data, procured from system
-     * sources. If the underlying system has not collected enough entropy yet, this function
-     * may block.
-     *
-     * **NOTE:** [buf] is modified in place, whereby any [RandomnessProcurementException] thrown
-     * may leave [buf] partially filled. It **must** be discarded in that event.
-     *
-     * @param [buf] the array to fill
-     * @return [buf]
-     * @throws [RandomnessProcurementException] if the underlying API fails
-     * */
-    public abstract fun nextBytes(buf: ByteArray): ByteArray
 }

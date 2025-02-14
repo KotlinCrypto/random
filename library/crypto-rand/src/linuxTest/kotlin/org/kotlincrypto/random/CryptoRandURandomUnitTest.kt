@@ -27,7 +27,7 @@ class CryptoRandURandomUnitTest: CryptoRandUnitTest() {
     @Test
     fun givenSystem_whenHasGetRandom_thenIsTrue() {
         // Should always be true, unless linux box running this test
-        // is rocking LIBC 3.16 or below... Which I don't even think
+        // is rocking GLIBC 2.24 or below... Which I don't even think
         // Kotlin would run on?
         //
         // This simply confirms that the CryptoRand.Default.nextBytes
