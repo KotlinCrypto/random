@@ -16,6 +16,7 @@
 import org.jetbrains.dokka.gradle.DokkaExtension
 import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
 import java.net.URI
+import java.time.LocalDate
 
 plugins {
     id("org.jetbrains.dokka")
@@ -32,8 +33,10 @@ extensions.configure<DokkaExtension> {
         includes.from("README.md")
         enableKotlinStdLibDocumentationLink.set(false)
 
-        externalDocumentationLinks.create("error") {
-            url.set(URI("https://error.kotlincrypto.org/"))
+        externalDocumentationLinks {
+            register(project.path + ":error") {
+                url.set(URI("https://error.kotlincrypto.org/"))
+            }
         }
 
         sourceLink {
@@ -45,5 +48,9 @@ extensions.configure<DokkaExtension> {
         documentedVisibilities(
             VisibilityModifier.Public,
         )
+    }
+
+    pluginsConfiguration.html {
+        footerMessage.set("© 2025-${LocalDate.now().year} Copyright KotlinCrypto")
     }
 }
