@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 0.5.0 (2025-02-25)
+ - Replaces `SecRandomCopyBytes` usage with `CCRandomGenerateBytes` for `Darwin` [[#33]][33]
+ - Updates `kotlin` to `2.1.10` [[#34]][34]
+ - Updates `kotlincrypto.error` to `0.3.0` [[#34]][34]
+ - Removes module `:secure-random` [[#31]][31]
+
 ## Version 0.4.0 (2025-02-09)
  - Adds module `crypto-rand` with new `CryptoRand` implementation [[#28]][28] [[#29]][29]
  - Deprecates `SecureRandom` in favor of `CryptoRand` [[#28]][28]
@@ -49,3 +55,6 @@
 [26]: https://github.com/KotlinCrypto/random/pull/26
 [28]: https://github.com/KotlinCrypto/random/pull/28
 [29]: https://github.com/KotlinCrypto/random/pull/29
+[31]: https://github.com/KotlinCrypto/random/pull/31
+[33]: https://github.com/KotlinCrypto/random/pull/33
+[34]: https://github.com/KotlinCrypto/random/pull/34
