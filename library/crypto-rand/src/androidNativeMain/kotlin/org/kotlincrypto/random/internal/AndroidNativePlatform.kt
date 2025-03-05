@@ -19,7 +19,5 @@ package org.kotlincrypto.random.internal
 
 import kotlinx.cinterop.ExperimentalForeignApi
 
-internal actual inline fun _SYS_getrandom(): Int {
-    @OptIn(ExperimentalForeignApi::class)
-    return SYS_getrandom
-}
+@OptIn(ExperimentalForeignApi::class)
+internal actual inline fun _SYS_getrandom(): Int = SYS_getrandom

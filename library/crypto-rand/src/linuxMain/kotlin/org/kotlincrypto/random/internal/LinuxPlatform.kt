@@ -19,6 +19,4 @@ package org.kotlincrypto.random.internal
 
 import platform.linux.SYS_getrandom
 
-internal actual inline fun _SYS_getrandom(): Int {
-    return SYS_getrandom
-}
+internal actual inline fun _SYS_getrandom(): Int = SYS_getrandom
