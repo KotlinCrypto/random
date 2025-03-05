@@ -24,14 +24,12 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-// https://docs.piston.rs/dev_menu/libc/constant.SYS_getrandom.html
-private const val SYS_getrandom: Long = 318L
-// https://docs.piston.rs/dev_menu/libc/constant.GRND_NONBLOCK.html
-private const val GRND_NONBLOCK: UInt = 0x0001u
+@Suppress("FunctionName")
+internal expect inline fun _SYS_getrandom(): Int
 
 @OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
 private inline fun getrandom2(buf: CPointer<ByteVar>, buflen: size_t, flags: u_int): Int {
-    return syscall(SYS_getrandom.convert(), buf, buflen, flags).convert()
+    return syscall(_SYS_getrandom().convert(), buf, buflen, flags).convert()
 }
 
 // getrandom(2) available for Linux Kernel 3.17+ (Android API 23+)
@@ -39,7 +37,7 @@ private inline fun getrandom2(buf: CPointer<ByteVar>, buflen: size_t, flags: u_i
 internal val HAS_GET_RANDOM: Boolean by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
     val buf = ByteArray(1)
     val result = buf.usePinned { pinned ->
-        getrandom2(pinned.addressOf(0), buf.size.toULong().convert(), GRND_NONBLOCK)
+        getrandom2(pinned.addressOf(0), buf.size.convert(), 0x0001u /* GRND_NONBLOCK */)
     }
     if (result >= 0) return@lazy true
 

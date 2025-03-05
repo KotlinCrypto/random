@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.konan.target.Family
+
 plugins {
     id("configuration")
 }
@@ -45,6 +48,20 @@ kmpConfiguration {
 
                     androidNativeMain?.apply { dependsOn(linuxAndroidMain) }
                     findByName("androidNativeTest")?.apply { dependsOn(linuxAndroidTest) }
+                }
+            }
+        }
+
+        kotlin {
+            val cInteropDir = projectDir
+                .resolve("src")
+                .resolve("nativeInterop")
+                .resolve("cinterop")
+
+            targets.filterIsInstance<KotlinNativeTarget>().forEach target@ { target ->
+                if (target.konanTarget.family != Family.ANDROID) return@target
+                target.compilations["main"].cinterops.create("syscall") {
+                    definitionFile.set(cInteropDir.resolve("$name.def"))
                 }
             }
         }

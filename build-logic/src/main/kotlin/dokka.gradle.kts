@@ -51,6 +51,6 @@ extensions.configure<DokkaExtension> {
     }
 
     pluginsConfiguration.html {
-        footerMessage.set("© 2025-${LocalDate.now().year} Copyright KotlinCrypto")
+        footerMessage.set("© 2023-${LocalDate.now().year} Copyright KotlinCrypto")
     }
 }
