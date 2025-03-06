@@ -17,6 +17,7 @@ if (CHECK_PUBLICATION != null) {
 } else {
     listOf(
         "crypto-rand",
+        "internal-cinterop",
     ).forEach { name ->
         include(":library:$name")
     }
