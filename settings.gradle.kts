@@ -24,4 +24,5 @@ if (CHECK_PUBLICATION != null) {
 
     include(":benchmarks")
     include(":sample")
+    include(":test-android")
 }
