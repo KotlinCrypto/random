@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-#include "sys_random.h"
+#include "crypto_rand_sys.h"
 
 #ifdef __ANDROID__
 #include <sys/syscall.h>

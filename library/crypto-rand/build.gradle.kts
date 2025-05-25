@@ -72,7 +72,7 @@ kmpConfiguration {
 
             val interopTaskInfo = targets.filterIsInstance<KotlinNativeTarget>().map { target ->
                 if (target.konanTarget.family == Family.ANDROID) {
-                    target.compilations["main"].cinterops.create("sys_random") {
+                    target.compilations["main"].cinterops.create("crypto_rand_sys") {
                         definitionFile.set(cInteropDir.resolve("$name.def"))
                         includeDirs(cInteropDir)
                     }
@@ -86,7 +86,7 @@ kmpConfiguration {
             project.extensions.configure<CompileToBitcodeExtension>("cklib") {
                 config.configure(libs)
 
-                create("sys_random") {
+                create("crypto_rand_sys") {
                     language = CompileToBitcode.Language.C
                     srcDirs = project.files(cInteropDir)
                     includeFiles = listOf("$compileName.c")
