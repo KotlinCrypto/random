@@ -91,6 +91,10 @@ kmpConfiguration {
                     srcDirs = project.files(cInteropDir)
                     includeFiles = listOf("$compileName.c")
 
+                    listOf(
+                        "-Wno-unused-command-line-argument",
+                    ).let { compilerArgs.addAll(it) }
+
                     val kt = KonanTarget.predefinedTargets[target]!!
 
                     // Must add dependency on the test cinterop task to ensure
