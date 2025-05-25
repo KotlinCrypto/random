@@ -32,7 +32,7 @@ private inline fun getrandom2(buf: CPointer<ByteVar>, buflen: size_t, flags: u_i
     return syscall(_SYS_getrandom().convert(), buf, buflen, flags).convert()
 }
 
-// getrandom(2) available for Linux Kernel 3.17+ (Android API 23+)
+// getrandom(2) available for Linux Kernel 3.17+ (Android API 26+)
 @OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
 internal val HAS_GET_RANDOM: Boolean by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
     val buf = ByteArray(1)

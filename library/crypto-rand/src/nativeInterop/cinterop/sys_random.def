@@ -1,0 +1,3 @@
+package = org.kotlincrypto.random.internal
+headers = sys_random.h
+headerFilter = sys_random.h

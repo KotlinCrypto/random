@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-package org.kotlincrypto.random.internal.cinterop
+package org.kotlincrypto.random
 
-@Suppress("unused")
-internal fun stub() { /* no-op */ }
+internal expect val SHOULD_HAVE_GET_RANDOM: Boolean

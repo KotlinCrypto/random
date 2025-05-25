@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("FunctionName", "NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress", "SpellCheckingInspection")
 
-package org.kotlincrypto.random.internal
+/* https://youtrack.jetbrains.com/issue/KT-75722 */
+#ifndef CRYPTO_RAND_SYS_H
+#define CRYPTO_RAND_SYS_H
 
-import kotlinx.cinterop.ExperimentalForeignApi
+#ifdef __ANDROID__
+int __SYS_getrandom();
+#endif /* !defined(__ANDROID__) */
 
-// https://youtrack.jetbrains.com/issue/KT-75722
-@ExperimentalForeignApi
-internal actual inline fun _SYS_getrandom(): Int = __SYS_getrandom()
+#endif /* !defined(CRYPTO_RAND_SYS_H) */

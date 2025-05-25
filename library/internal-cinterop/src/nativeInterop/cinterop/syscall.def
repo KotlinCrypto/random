@@ -1,3 +1,0 @@
-# SYS_getrandom for AndroidNative targets
-package = org.kotlincrypto.random.internal.cinterop
-headers = sys/syscall.h
