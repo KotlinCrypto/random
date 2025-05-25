@@ -3,6 +3,7 @@ rootProject.name = "random"
 pluginManagement {
     repositories {
         mavenCentral()
+        google()
         gradlePluginPortal()
     }
 }
@@ -17,11 +18,11 @@ if (CHECK_PUBLICATION != null) {
 } else {
     listOf(
         "crypto-rand",
-        "internal-cinterop",
     ).forEach { name ->
         include(":library:$name")
     }
 
     include(":benchmarks")
     include(":sample")
+    include(":test-android")
 }

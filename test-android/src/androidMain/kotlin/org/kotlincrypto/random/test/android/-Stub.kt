@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("FunctionName", "NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress", "SpellCheckingInspection")
+package org.kotlincrypto.random.test.android
 
-package org.kotlincrypto.random.internal
-
-import kotlinx.cinterop.ExperimentalForeignApi
-
-// https://youtrack.jetbrains.com/issue/KT-75722
-@ExperimentalForeignApi
-internal actual inline fun _SYS_getrandom(): Int = __SYS_getrandom()
+@Suppress("UNUSED")
+internal fun stub() { /* no-op */ }

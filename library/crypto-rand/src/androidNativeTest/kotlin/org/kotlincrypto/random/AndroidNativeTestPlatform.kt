@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("FunctionName", "NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress", "SpellCheckingInspection")
+package org.kotlincrypto.random
 
-package org.kotlincrypto.random.internal
+import platform.posix.android_get_device_api_level
 
-import kotlinx.cinterop.ExperimentalForeignApi
-
-// https://youtrack.jetbrains.com/issue/KT-75722
-@ExperimentalForeignApi
-internal actual inline fun _SYS_getrandom(): Int = __SYS_getrandom()
+internal actual val SHOULD_HAVE_GET_RANDOM: Boolean = android_get_device_api_level() >= 26

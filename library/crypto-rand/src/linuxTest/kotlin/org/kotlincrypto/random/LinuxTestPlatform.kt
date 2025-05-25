@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("FunctionName", "NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress", "SpellCheckingInspection")
+package org.kotlincrypto.random
 
-package org.kotlincrypto.random.internal
-
-import kotlinx.cinterop.ExperimentalForeignApi
-
-// https://youtrack.jetbrains.com/issue/KT-75722
-@ExperimentalForeignApi
-internal actual inline fun _SYS_getrandom(): Int = __SYS_getrandom()
+// Should always be true, unless linux box running this test
+// is rocking GLIBC 2.24 or below... Which I don't even think
+// Kotlin would run on?
+//
+// This simply confirms that the CryptoRand.Default.nextBytes
+// is working as expected using getrandom(2) to source them
+// when CryptoRandUnitTest is run from commonTest for Linux.
+internal actual val SHOULD_HAVE_GET_RANDOM: Boolean = true

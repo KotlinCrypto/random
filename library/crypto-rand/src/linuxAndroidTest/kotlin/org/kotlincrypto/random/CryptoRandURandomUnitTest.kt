@@ -18,22 +18,15 @@ package org.kotlincrypto.random
 import org.kotlincrypto.random.internal.HAS_GET_RANDOM
 import org.kotlincrypto.random.internal.cryptoRandFillURandom
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertEquals
 
 class CryptoRandURandomUnitTest: CryptoRandUnitTest() {
 
     override val cryptoRand: CryptoRand = URandom
 
     @Test
-    fun givenSystem_whenHasGetRandom_thenIsTrue() {
-        // Should always be true, unless linux box running this test
-        // is rocking GLIBC 2.24 or below... Which I don't even think
-        // Kotlin would run on?
-        //
-        // This simply confirms that the CryptoRand.Default.nextBytes
-        // is working as expected using getrandom(2) to source them
-        // when CryptoRandUnitTest is run from commonTest for Linux.
-        assertTrue(HAS_GET_RANDOM)
+    fun givenPlatform_whenHasGetRandom_thenIsAsExpected() {
+        assertEquals(SHOULD_HAVE_GET_RANDOM, HAS_GET_RANDOM)
     }
 
     @OptIn(DelicateCryptoRandApi::class)

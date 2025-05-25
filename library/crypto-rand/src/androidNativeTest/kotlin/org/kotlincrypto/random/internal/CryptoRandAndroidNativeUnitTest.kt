@@ -13,12 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("FunctionName", "NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress", "SpellCheckingInspection")
-
 package org.kotlincrypto.random.internal
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import org.kotlincrypto.random.internal.testing.SYS_getrandom
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-// https://youtrack.jetbrains.com/issue/KT-75722
-@ExperimentalForeignApi
-internal actual inline fun _SYS_getrandom(): Int = __SYS_getrandom()
+@OptIn(ExperimentalForeignApi::class)
+class CryptoRandAndroidNativeUnitTest {
+
+    @Test
+    fun givenSYSgetrandom_whenCheckedAgainstHeaderDefinition_thenMatches() {
+        assertEquals(
+            SYS_getrandom,
+            _SYS_getrandom(),
+            "expected[${SYS_getrandom}] vs actual[${_SYS_getrandom()}]",
+        )
+    }
+}
