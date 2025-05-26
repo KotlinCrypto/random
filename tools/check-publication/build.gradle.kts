@@ -43,15 +43,5 @@ kmpConfiguration {
                 }
             }
         }
-
-        kotlin {
-            with(sourceSets) {
-                findByName("androidNativeMain")?.apply {
-                    dependencies {
-                        implementation("$group:internal-cinterop:$version")
-                    }
-                }
-            }
-        }
     }
 }
