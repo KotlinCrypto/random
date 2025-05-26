@@ -44,12 +44,12 @@ The best way to keep `KotlinCrypto` dependencies up to date is by using the
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("org.kotlincrypto.random:crypto-rand:0.5.0")
+    implementation("org.kotlincrypto.random:crypto-rand:0.5.1")
 }
 ```
 
 <!-- TAG_VERSION -->
-[badge-latest-release]: https://img.shields.io/badge/latest--release-0.5.0-blue.svg?style=flat
+[badge-latest-release]: https://img.shields.io/badge/latest--release-0.5.1-blue.svg?style=flat
 [badge-license]: https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat
 
 <!-- TAG_DEPENDENCIES -->

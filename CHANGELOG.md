@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Version 0.5.1 (2025-05-26)
+ - Fixes issue on Android Native where `getrandom(2)` was not registering as available for 
+   the given device API and always falling back to using `/dev/urandom` [[#40]][40]
+
 ## Version 0.5.0 (2025-02-25)
  - Replaces `SecRandomCopyBytes` usage with `CCRandomGenerateBytes` for `Darwin` [[#33]][33]
  - Updates `kotlin` to `2.1.10` [[#34]][34]
@@ -58,3 +62,5 @@
 [31]: https://github.com/KotlinCrypto/random/pull/31
 [33]: https://github.com/KotlinCrypto/random/pull/33
 [34]: https://github.com/KotlinCrypto/random/pull/34
+[40]: https://github.com/KotlinCrypto/random/pull/40
+
