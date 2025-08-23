@@ -71,18 +71,18 @@ kmpConfiguration {
                 .resolve("cinterop")
 
             val interopTaskInfo = targets.filterIsInstance<KotlinNativeTarget>().map { target ->
-                val hasSysRandom = when (target.konanTarget.family) {
-                    Family.ANDROID, Family.LINUX -> "-D__CRYPTO_RAND_HAS_SYS_RANDOM__=1"
+                val hasSysGetRandom = when (target.konanTarget.family) {
+                    Family.ANDROID, Family.LINUX -> "-DCRYPTO_RAND_HAS_SYS_GETRANDOM=1"
                     else -> null
                 }
 
                 val taskName = target.compilations["main"].cinterops.create("crypto_rand_sys") {
                     definitionFile.set(cInteropDir.resolve("$name.def"))
                     includeDirs(cInteropDir)
-                    if (hasSysRandom != null) compilerOpts.add(hasSysRandom)
+                    if (hasSysGetRandom != null) compilerOpts.add(hasSysGetRandom)
                 }.interopProcessingTaskName
 
-                Triple(taskName, target.konanTarget, hasSysRandom)
+                Triple(taskName, target.konanTarget, hasSysGetRandom)
             }
 
             project.extensions.configure<CompileToBitcodeExtension>("cklib") {
@@ -99,13 +99,21 @@ kmpConfiguration {
 
                     val kt = KonanTarget.predefinedTargets[target]!!
 
-                    interopTaskInfo.forEach { (interopTaskName, konanTarget, hasSysRandom) ->
+                    interopTaskInfo.forEach { (interopTaskName, konanTarget, hasSysGetRandom) ->
                         if (kt != konanTarget) return@forEach
 
                         // Must add dependency on the test cinterop task to ensure
                         // that Kotlin/Native dependencies get downloaded beforehand
                         this.dependsOn(interopTaskName)
-                        if (hasSysRandom != null) compilerArgs.add(hasSysRandom)
+
+                        if (hasSysGetRandom != null) {
+                            compilerArgs.add(hasSysGetRandom)
+
+                            // Linux x86_64 is the only compilation w/o sys/random.h
+                            if (konanTarget != KonanTarget.LINUX_X64) {
+                                compilerArgs.add("-DCRYPTO_RAND_HAS_SYS_RANDOM_H=1")
+                            }
+                        }
                     }
                 }
             }

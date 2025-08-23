@@ -16,20 +16,24 @@
 
 #include "crypto_rand_sys.h"
 
-#ifdef __CRYPTO_RAND_HAS_SYS_RANDOM__
+#if CRYPTO_RAND_HAS_SYS_GETRANDOM
 #include <sys/syscall.h>
 #include <unistd.h>
 
-#if __has_include(<sys/random.h>)
+#ifndef CRYPTO_RAND_HAS_SYS_RANDOM_H
+#define CRYPTO_RAND_HAS_SYS_RANDOM_H 0
+#endif // CRYPTO_RAND_HAS_SYS_RANDOM_H
+
+#if CRYPTO_RAND_HAS_SYS_RANDOM_H
 #include <sys/random.h>
-#endif // __has_include(<sys/random.h>)
+#endif // CRYPTO_RAND_HAS_SYS_RANDOM_H
 
 #ifndef GRND_NONBLOCK
 #define GRND_NONBLOCK 0x01
 #endif // GRND_NONBLOCK
 
 ssize_t
-__SYS_getrandom(void *__buf, size_t __len, int __is_nonblock)
+__getrandom(void *__buf, size_t __len, int __is_nonblock)
 {
   unsigned int flags = 0;
   if (__is_nonblock) {
@@ -37,4 +41,4 @@ __SYS_getrandom(void *__buf, size_t __len, int __is_nonblock)
   }
   return syscall(SYS_getrandom, __buf, __len, flags);
 }
-#endif // __CRYPTO_RAND_HAS_SYS_RANDOM__
+#endif // CRYPTO_RAND_HAS_SYS_GETRANDOM

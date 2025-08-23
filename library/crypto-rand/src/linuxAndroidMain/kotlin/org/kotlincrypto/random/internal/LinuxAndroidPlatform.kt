@@ -29,7 +29,7 @@ import kotlin.contracts.contract
 internal val HAS_GET_RANDOM: Boolean by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
     val buf = ByteArray(1)
     val result = buf.usePinned { pinned ->
-        __SYS_getrandom(__buf = pinned.addressOf(0), __len = buf.size.convert(), __is_nonblock = 1).toInt()
+        __getrandom(__buf = pinned.addressOf(0), __len = buf.size.convert(), __is_nonblock = 1).toInt()
     }
     if (result >= 0) return@lazy true
 
@@ -46,7 +46,7 @@ internal val HAS_GET_RANDOM: Boolean by lazy(LazyThreadSafetyMode.SYNCHRONIZED) 
 @OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
 internal actual fun ByteArray.cryptoRandFill() {
     if (HAS_GET_RANDOM) {
-        cryptoRandFill { ptr, len -> __SYS_getrandom(__buf = ptr, __len = len.convert(), __is_nonblock = 0).toInt() }
+        cryptoRandFill { ptr, len -> __getrandom(__buf = ptr, __len = len.convert(), __is_nonblock = 0).toInt() }
     } else {
         cryptoRandFillURandom()
     }
