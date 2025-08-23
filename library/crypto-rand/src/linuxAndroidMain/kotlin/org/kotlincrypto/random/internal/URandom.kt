@@ -33,7 +33,11 @@ private inline fun <T: Any?> openRDONLY(path: String, block: (fd: Int) -> T): T 
         callsInPlace(block, InvocationKind.AT_MOST_ONCE)
     }
 
-    val fd = open(path, O_RDONLY or O_CLOEXEC, null)
+    @Suppress("VariableInitializerIsRedundant")
+    var fd = -1
+    do {
+        fd = open(path, O_RDONLY or O_CLOEXEC, 0)
+    } while (fd == -1 && errno == EINTR)
     if (fd == -1) throw errnoToRandomnessProcurementException(errno)
 
     try {
