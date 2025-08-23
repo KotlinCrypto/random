@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("KotlinRedundantDiagnosticSuppress", "NOTHING_TO_INLINE", "SpellCheckingInspection", "UnnecessaryOptInAnnotation")
+@file:Suppress("NOTHING_TO_INLINE", "RemoveRedundantCallsOfConversionMethods")
 
 package org.kotlincrypto.random.internal
 
@@ -24,20 +24,12 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-@Suppress("FunctionName")
-internal expect inline fun _SYS_getrandom(): Int
-
-@OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
-private inline fun getrandom2(buf: CPointer<ByteVar>, buflen: size_t, flags: u_int): Int {
-    return syscall(_SYS_getrandom().convert(), buf, buflen, flags).convert()
-}
-
 // getrandom(2) available for Linux Kernel 3.17+ (Android API 26+)
 @OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
 internal val HAS_GET_RANDOM: Boolean by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
     val buf = ByteArray(1)
     val result = buf.usePinned { pinned ->
-        getrandom2(pinned.addressOf(0), buf.size.convert(), 0x0001u /* GRND_NONBLOCK */)
+        __SYS_getrandom(__buf = pinned.addressOf(0), __len = buf.size.convert(), __is_nonblock = 1).toInt()
     }
     if (result >= 0) return@lazy true
 
@@ -54,7 +46,7 @@ internal val HAS_GET_RANDOM: Boolean by lazy(LazyThreadSafetyMode.SYNCHRONIZED) 
 @OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
 internal actual fun ByteArray.cryptoRandFill() {
     if (HAS_GET_RANDOM) {
-        cryptoRandFill { ptr, len -> getrandom2(ptr, len.toULong().convert(), 0u) }
+        cryptoRandFill { ptr, len -> __SYS_getrandom(__buf = ptr, __len = len.convert(), __is_nonblock = 0).toInt() }
     } else {
         cryptoRandFillURandom()
     }

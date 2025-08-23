@@ -71,16 +71,18 @@ kmpConfiguration {
                 .resolve("cinterop")
 
             val interopTaskInfo = targets.filterIsInstance<KotlinNativeTarget>().map { target ->
-                if (target.konanTarget.family == Family.ANDROID) {
-                    target.compilations["main"].cinterops.create("crypto_rand_sys") {
-                        definitionFile.set(cInteropDir.resolve("$name.def"))
-                        includeDirs(cInteropDir)
-                    }
+                val hasSysRandom = when (target.konanTarget.family) {
+                    Family.ANDROID, Family.LINUX -> "-D__CRYPTO_RAND_HAS_SYS_RANDOM__=1"
+                    else -> null
                 }
 
-                target.compilations["test"].cinterops.create("syscall") {
+                val taskName = target.compilations["main"].cinterops.create("crypto_rand_sys") {
                     definitionFile.set(cInteropDir.resolve("$name.def"))
-                }.interopProcessingTaskName to target.konanTarget
+                    includeDirs(cInteropDir)
+                    if (hasSysRandom != null) compilerOpts.add(hasSysRandom)
+                }.interopProcessingTaskName
+
+                Triple(taskName, target.konanTarget, hasSysRandom)
             }
 
             project.extensions.configure<CompileToBitcodeExtension>("cklib") {
@@ -97,11 +99,13 @@ kmpConfiguration {
 
                     val kt = KonanTarget.predefinedTargets[target]!!
 
-                    // Must add dependency on the test cinterop task to ensure
-                    // that Kotlin/Native dependencies get downloaded beforehand
-                    interopTaskInfo.forEach { (interopTaskName, konanTarget) ->
+                    interopTaskInfo.forEach { (interopTaskName, konanTarget, hasSysRandom) ->
                         if (kt != konanTarget) return@forEach
+
+                        // Must add dependency on the test cinterop task to ensure
+                        // that Kotlin/Native dependencies get downloaded beforehand
                         this.dependsOn(interopTaskName)
+                        if (hasSysRandom != null) compilerArgs.add(hasSysRandom)
                     }
                 }
             }

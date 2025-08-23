@@ -16,12 +16,25 @@
 
 #include "crypto_rand_sys.h"
 
-#ifdef __ANDROID__
+#ifdef __CRYPTO_RAND_HAS_SYS_RANDOM__
 #include <sys/syscall.h>
+#include <unistd.h>
 
-int
-__SYS_getrandom()
+#if __has_include(<sys/random.h>)
+#include <sys/random.h>
+#endif // __has_include(<sys/random.h>)
+
+#ifndef GRND_NONBLOCK
+#define GRND_NONBLOCK 0x01
+#endif // GRND_NONBLOCK
+
+ssize_t
+__SYS_getrandom(void *__buf, size_t __len, int __is_nonblock)
 {
-  return SYS_getrandom;
+  unsigned int flags = 0;
+  if (__is_nonblock) {
+    flags = GRND_NONBLOCK;
+  }
+  return syscall(SYS_getrandom, __buf, __len, flags);
 }
-#endif /* !defined(__ANDROID__) */
+#endif // __CRYPTO_RAND_HAS_SYS_RANDOM__

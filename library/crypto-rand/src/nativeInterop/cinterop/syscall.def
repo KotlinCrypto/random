@@ -1,6 +1,0 @@
-# SYS_getrandom for AndroidNative testing
-package = org.kotlincrypto.random.internal.testing
----
-#ifdef __ANDROID__
-#include <sys/syscall.h>
-#endif
