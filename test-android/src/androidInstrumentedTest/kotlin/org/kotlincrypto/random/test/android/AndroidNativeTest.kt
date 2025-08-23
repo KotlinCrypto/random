@@ -20,7 +20,7 @@ import androidx.test.core.app.ApplicationProvider
 import io.matthewnelson.kmp.file.toFile
 import io.matthewnelson.kmp.process.Process
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.fail
 
 class AndroidNativeTest {
 
@@ -35,8 +35,11 @@ class AndroidNativeTest {
                 maxBuffer = Int.MAX_VALUE / 2
             }
 
-        assertEquals(0, out.processInfo.exitCode, out.stdout)
-        println(out.stdout)
-        println(out.stderr)
+        if (out.processInfo.exitCode == 0) return
+
+        val sb = StringBuilder(out.toString()).appendLine()
+        sb.appendLine(out.stdout).appendLine()
+        sb.appendLine(out.stderr).appendLine()
+        fail(sb.toString())
     }
 }
