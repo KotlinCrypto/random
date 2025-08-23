@@ -1,6 +1,6 @@
 [versions]
-androidx-test-core          = "1.6.1"
-androidx-test-runner        = "1.6.2"
+androidx-test-core          = "1.7.0"
+androidx-test-runner        = "1.7.0"
 
 gradle-android              = "8.10.0"
 gradle-benchmark            = "0.4.14"
