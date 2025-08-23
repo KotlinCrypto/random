@@ -36,8 +36,8 @@ kmpConfiguration {
 
         androidLibrary {
             android {
-                buildToolsVersion = "34.0.0"
-                compileSdk = 34
+                buildToolsVersion = "35.0.1"
+                compileSdk = 35
                 namespace = "org.kotlincrypto.random.test.android"
 
                 defaultConfig {
