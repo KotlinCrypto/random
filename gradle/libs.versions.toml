@@ -1,18 +1,18 @@
 [versions]
-androidx-test-core          = "1.6.1"
-androidx-test-runner        = "1.6.2"
+androidx-test-core          = "1.7.0"
+androidx-test-runner        = "1.7.0"
 
-gradle-android              = "8.7.3"
-gradle-benchmark            = "0.4.13"
-gradle-binary-compat        = "0.17.0"
-gradle-cklib                = "0.3.3"
+gradle-android              = "8.10.0"
+gradle-benchmark            = "0.4.14"
+gradle-binary-compat        = "0.18.1"
+gradle-cklib                = "0.3.4"
 gradle-dokka                = "2.0.0"
-gradle-kmp-configuration    = "0.4.0"
-gradle-kotlin               = "2.1.10"
-gradle-publish-maven        = "0.30.0"
+gradle-kmp-configuration    = "0.5.2"
+gradle-kotlin               = "2.2.10"
+gradle-publish-maven        = "0.34.0"
 
-kmp-process                 = "0.2.1"
-kotlincrypto-error          = "0.3.0"
+kmp-process                 = "0.3.2"
+kotlincrypto-error          = "0.3.0" # TODO: Update
 
 [libraries]
 gradle-dokka                = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "gradle-dokka" }

@@ -16,7 +16,6 @@
 import io.matthewnelson.kmp.configuration.extension.KmpConfigurationExtension
 import io.matthewnelson.kmp.configuration.extension.container.target.KmpConfigurationContainerDsl
 import org.gradle.api.Action
-import org.gradle.api.JavaVersion
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.konan.target.HostManager
 
@@ -35,10 +34,6 @@ fun KmpConfigurationExtension.configureShared(
         }
 
         jvm {
-            kotlinJvmTarget = JavaVersion.VERSION_1_8
-            compileSourceCompatibility = JavaVersion.VERSION_1_8
-            compileTargetCompatibility = JavaVersion.VERSION_1_8
-
             // Windows cries if Java 11 is not installed...
             if (!HostManager.hostIsMingw) {
                 java9ModuleInfoName = java9ModuleName

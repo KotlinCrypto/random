@@ -23,7 +23,8 @@ repositories { google() }
 
 kmpConfiguration {
     configure {
-        val jniLibsDir = projectDir
+        val jniLibsDir = project
+            .projectDir
             .resolve("src")
             .resolve("androidInstrumentedTest")
             .resolve("jniLibs")
@@ -35,8 +36,8 @@ kmpConfiguration {
 
         androidLibrary {
             android {
-                buildToolsVersion = "34.0.0"
-                compileSdk = 34
+                buildToolsVersion = "35.0.1"
+                compileSdk = 35
                 namespace = "org.kotlincrypto.random.test.android"
 
                 defaultConfig {
@@ -58,10 +59,6 @@ kmpConfiguration {
                     implementation(libs.kmp.process)
                 }
             }
-
-            kotlinJvmTarget = JavaVersion.VERSION_1_8
-            compileSourceCompatibility = JavaVersion.VERSION_1_8
-            compileTargetCompatibility = JavaVersion.VERSION_1_8
         }
 
         common {
