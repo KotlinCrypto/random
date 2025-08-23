@@ -23,7 +23,8 @@ repositories { google() }
 
 kmpConfiguration {
     configure {
-        val jniLibsDir = projectDir
+        val jniLibsDir = project
+            .projectDir
             .resolve("src")
             .resolve("androidInstrumentedTest")
             .resolve("jniLibs")
@@ -58,10 +59,6 @@ kmpConfiguration {
                     implementation(libs.kmp.process)
                 }
             }
-
-            kotlinJvmTarget = JavaVersion.VERSION_1_8
-            compileSourceCompatibility = JavaVersion.VERSION_1_8
-            compileTargetCompatibility = JavaVersion.VERSION_1_8
         }
 
         common {
