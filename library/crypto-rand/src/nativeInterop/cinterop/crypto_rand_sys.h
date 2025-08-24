@@ -14,12 +14,22 @@
  * limitations under the License.
  **/
 
-/* https://youtrack.jetbrains.com/issue/KT-75722 */
 #ifndef CRYPTO_RAND_SYS_H
 #define CRYPTO_RAND_SYS_H
 
-#ifdef __ANDROID__
-int __SYS_getrandom();
-#endif /* !defined(__ANDROID__) */
+#ifndef CRYPTO_RAND_HAS_SYS_GETRANDOM
+#define CRYPTO_RAND_HAS_SYS_GETRANDOM 0
+#endif // CRYPTO_RAND_HAS_SYS_GETRANDOM
 
-#endif /* !defined(CRYPTO_RAND_SYS_H) */
+#if CRYPTO_RAND_HAS_SYS_GETRANDOM
+#include <sys/types.h>
+
+/**
+ * Performs syscall using SYS_getrandom and provided arguments.
+ *
+ * If __is_nonblock > 0, will use flag GRND_NONBLOCK, otherwise will use 0.
+ * */
+ssize_t __getrandom(void *__buf, size_t __len, int __is_nonblock);
+#endif // CRYPTO_RAND_HAS_SYS_GETRANDOM
+
+#endif // CRYPTO_RAND_SYS_H
