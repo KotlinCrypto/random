@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Version 0.5.2 (2025-08-25)
+ - Updates `kotlin` to `2.2.10` [[#41]][41]
+ - Updates `kotlincrypto.error` to `0.3.1`
+ - Ensure `posix.open` is retried on `EINTR` [[#44]][44]
+ - Migrates `syscall` for `SYS_getrandom` to C code [[#45]][45]
+
 ## Version 0.5.1 (2025-05-26)
  - Fixes issue on Android Native where `getrandom(2)` was not registering as available for 
    the given device API and always falling back to using `/dev/urandom` [[#40]][40]
@@ -63,4 +69,6 @@
 [33]: https://github.com/KotlinCrypto/random/pull/33
 [34]: https://github.com/KotlinCrypto/random/pull/34
 [40]: https://github.com/KotlinCrypto/random/pull/40
-
+[41]: https://github.com/KotlinCrypto/random/pull/41
+[44]: https://github.com/KotlinCrypto/random/pull/44
+[45]: https://github.com/KotlinCrypto/random/pull/45
