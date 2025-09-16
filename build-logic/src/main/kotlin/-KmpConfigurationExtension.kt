@@ -17,6 +17,7 @@ import io.matthewnelson.kmp.configuration.extension.KmpConfigurationExtension
 import io.matthewnelson.kmp.configuration.extension.container.target.KmpConfigurationContainerDsl
 import org.gradle.api.Action
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.konan.target.HostManager
 
 fun KmpConfigurationExtension.configureShared(
@@ -51,6 +52,14 @@ fun KmpConfigurationExtension.configureShared(
             target {
                 browser()
                 nodejs()
+
+                if (publish) {
+                    @Suppress("DEPRECATION")
+                    compilerOptions {
+                        apiVersion.set(KotlinVersion.KOTLIN_1_9)
+                        languageVersion.set(KotlinVersion.KOTLIN_1_9)
+                    }
+                }
             }
         }
         @OptIn(ExperimentalWasmDsl::class)
@@ -81,6 +90,15 @@ fun KmpConfigurationExtension.configureShared(
         }
 
         if (publish) kotlin { explicitApi() }
+
+        if (publish) kotlin {
+            @Suppress("DEPRECATION")
+            compilerOptions {
+                freeCompilerArgs.add("-Xsuppress-version-warnings")
+                apiVersion.set(KotlinVersion.KOTLIN_1_8)
+                languageVersion.set(KotlinVersion.KOTLIN_1_8)
+            }
+        }
 
         action.execute(this)
     }

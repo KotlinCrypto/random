@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("KotlinRedundantDiagnosticSuppress", "NOTHING_TO_INLINE", "SpellCheckingInspection", "UnnecessaryOptInAnnotation")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package org.kotlincrypto.random.internal
 
@@ -33,8 +33,7 @@ private inline fun <T: Any?> openRDONLY(path: String, block: (fd: Int) -> T): T 
         callsInPlace(block, InvocationKind.AT_MOST_ONCE)
     }
 
-    @Suppress("VariableInitializerIsRedundant")
-    var fd = -1
+    var fd: Int
     do {
         fd = open(path, O_RDONLY or O_CLOEXEC, 0)
     } while (fd == -1 && errno == EINTR)
