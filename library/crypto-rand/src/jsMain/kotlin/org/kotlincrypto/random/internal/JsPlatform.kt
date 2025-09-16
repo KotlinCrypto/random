@@ -21,7 +21,7 @@ import org.kotlincrypto.random.RandomnessProcurementException
 
 private const val BUFFER_SIZE = 1024 * 8
 
-private external class Crypto {
+private external interface Crypto {
     // Browser
     fun getRandomValues(array: dynamic)
     // Node.js

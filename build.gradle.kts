@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension
 import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnPlugin
 import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnRootExtension
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     alias(libs.plugins.android.library) apply(false)
@@ -63,6 +64,11 @@ plugins.withType<WasmYarnPlugin> {
 }
 
 apiValidation {
+    if (!HostManager.hostIsMac) {
+        validationDisabled = true
+        return@apiValidation
+    }
+
     @OptIn(kotlinx.validation.ExperimentalBCVApi::class)
     klib.enabled = findProperty("KMP_TARGETS") == null
 

@@ -21,7 +21,7 @@ import org.kotlincrypto.random.RandomnessProcurementException
 
 private const val BUFFER_SIZE = 1024 * 8
 
-private external class Crypto: JsAny {
+private external interface Crypto: JsAny {
     // Browser
     fun getRandomValues(array: Uint8Array)
     // Node.js
@@ -33,12 +33,12 @@ private open external class Uint8Array(length: Int) {
 }
 
 @Suppress("UNUSED_PARAMETER")
-private fun uint8ArrayGet(obj: Uint8Array, index: Int): Byte { js("return obj[index];") }
+private fun uint8ArrayGet(obj: Uint8Array, index: Int): Byte = js("obj[index]")
 @Suppress("NOTHING_TO_INLINE")
 private inline operator fun Uint8Array.get(index: Int): Byte = uint8ArrayGet(this, index)
 
 @Suppress("UNUSED_PARAMETER")
-private fun uint8ArraySet(obj: Uint8Array, index: Int, value: Byte) { js("obj[index] = value;") }
+private fun uint8ArraySet(obj: Uint8Array, index: Int, value: Byte) { js("obj[index] = value") }
 @Suppress("NOTHING_TO_INLINE")
 private inline operator fun Uint8Array.set(index: Int, value: Byte) { uint8ArraySet(this, index, value) }
 
