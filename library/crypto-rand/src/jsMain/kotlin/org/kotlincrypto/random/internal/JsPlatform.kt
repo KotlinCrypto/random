@@ -79,7 +79,7 @@ internal actual fun ByteArray.cryptoRandFill() {
         // chunk
         while (needed > BUFFER_SIZE) {
             jsCryptoFill(bufDynamic)
-            for (i in 0..<BUFFER_SIZE) {
+            for (i in 0 until BUFFER_SIZE) {
                 this[pos++] = (bufDynamic[i] as Number).toByte()
             }
             needed -= BUFFER_SIZE
@@ -89,13 +89,13 @@ internal actual fun ByteArray.cryptoRandFill() {
         if (needed > 0) {
             jsCryptoFill(buf.subarray(0, needed).asDynamic())
 
-            for (i in 0..<needed) {
+            for (i in 0 until needed) {
                 this[pos++] = (bufDynamic[i] as Number).toByte()
                 bufDynamic[i] = 0 // Always ensure buffer is zeroed out
             }
         }
 
-        for (i in needed..<BUFFER_SIZE) {
+        for (i in needed until BUFFER_SIZE) {
             bufDynamic[i] = 0 // Always ensure buffer is zeroed out
         }
     } catch (t: Throwable) {

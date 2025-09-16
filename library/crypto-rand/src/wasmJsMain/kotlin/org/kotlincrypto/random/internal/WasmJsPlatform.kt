@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT", "KotlinRedundantDiagnosticSuppress")
+@file:Suppress("ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT", "KotlinRedundantDiagnosticSuppress", "UNUSED")
 
 package org.kotlincrypto.random.internal
 
@@ -88,7 +88,7 @@ internal actual fun ByteArray.cryptoRandFill() {
         // chunk
         while (needed > BUFFER_SIZE) {
             jsCryptoFill(buf)
-            for (i in 0..<BUFFER_SIZE) {
+            for (i in 0 until BUFFER_SIZE) {
                 this[pos++] = buf[i]
             }
             needed -= BUFFER_SIZE
@@ -98,13 +98,13 @@ internal actual fun ByteArray.cryptoRandFill() {
         if (needed > 0) {
             jsCryptoFill(buf.subarray(0, needed))
 
-            for (i in 0..<needed) {
+            for (i in 0 until needed) {
                 this[pos++] = buf[i]
                 buf[i] = 0 // Always ensure buffer is zeroed out
             }
         }
 
-        for (i in needed..<BUFFER_SIZE) {
+        for (i in needed until BUFFER_SIZE) {
             buf[i] = 0 // Always ensure buffer is zeroed out
         }
     } catch (t: Throwable) {
