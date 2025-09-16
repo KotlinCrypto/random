@@ -86,7 +86,7 @@ kmpConfiguration {
             }
 
             project.extensions.configure<CompileToBitcodeExtension>("cklib") {
-                config.configure(libs)
+                val downloadDevLLVMTask = config.configure(libs)
 
                 create("crypto_rand_sys") {
                     language = CompileToBitcode.Language.C
@@ -102,9 +102,10 @@ kmpConfiguration {
                     interopTaskInfo.forEach { (interopTaskName, konanTarget, hasSysGetRandom) ->
                         if (kt != konanTarget) return@forEach
 
-                        // Must add dependency on the test cinterop task to ensure
-                        // that Kotlin/Native dependencies get downloaded beforehand
-                        this.dependsOn(interopTaskName)
+                        // Must add dependency on the cinterop task to ensure
+                        // Kotlin/Native dependencies get downloaded and are
+                        // present for cklib tasks to access.
+                        dependsOn(interopTaskName)
 
                         if (hasSysGetRandom != null) {
                             compilerArgs.add(hasSysGetRandom)
@@ -115,6 +116,8 @@ kmpConfiguration {
                             }
                         }
                     }
+
+                    dependsOn(downloadDevLLVMTask)
                 }
             }
         }
@@ -148,7 +151,7 @@ private object LLVM {
     }
 }
 
-private fun CKlibGradleExtension.configure(libs: LibrariesForLibs) {
+private fun CKlibGradleExtension.configure(libs: LibrariesForLibs): Task {
     kotlinVersion = libs.versions.gradle.kotlin.get()
     check(kotlinVersion == "2.2.20") {
         "Kotlin version out of date! Download URLs for LLVM need to be updated for ${project.path}"
@@ -179,7 +182,7 @@ private fun CKlibGradleExtension.configure(libs: LibrariesForLibs) {
 
     val source = DependencySource.Remote.Public(subDirectory = "${LLVM.VERSION}-${arch}-${host}")
 
-    DependencyProcessor(
+    val processor = DependencyProcessor(
         dependenciesRoot = cklibDir,
         dependenciesUrl = LLVM.URL,
         dependencyToCandidates = mapOf(llvmDev to listOf(source)),
@@ -194,5 +197,9 @@ private fun CKlibGradleExtension.configure(libs: LibrariesForLibs) {
             println("Downloading[$llvmDev] - $current / $total")
         },
         archiveType = archive,
-    ).run()
+    )
+
+    return project.tasks.register("downloadDevLLVM") {
+        actions = listOf(Action { processor.run() })
+    }.get()
 }
