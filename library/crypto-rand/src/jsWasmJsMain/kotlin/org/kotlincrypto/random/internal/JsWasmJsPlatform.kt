@@ -13,57 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT", "KotlinRedundantDiagnosticSuppress", "UNUSED")
-
 package org.kotlincrypto.random.internal
 
 import org.kotlincrypto.random.RandomnessProcurementException
+import org.kotlincrypto.random.internal.js.IS_NODE_JS
+import org.kotlincrypto.random.internal.js.JsCrypto
+import org.kotlincrypto.random.internal.js.JsUint8Array
+import org.kotlincrypto.random.internal.js.get
+import org.kotlincrypto.random.internal.js.jsCryptoBrowser
+import org.kotlincrypto.random.internal.js.jsCryptoNode
+import org.kotlincrypto.random.internal.js.set
 
 private const val BUFFER_SIZE = 1024 * 8
 
-private external interface Crypto: JsAny {
-    // Browser
-    fun getRandomValues(array: Uint8Array)
-    // Node.js
-    fun randomFillSync(buf: Uint8Array)
-}
+private val JS_CRYPTO: JsCrypto by lazy { if (IS_NODE_JS) jsCryptoNode() else jsCryptoBrowser() }
 
-private open external class Uint8Array(length: Int) {
-    fun subarray(start: Int, end: Int): Uint8Array
-}
-
-@Suppress("UNUSED_PARAMETER")
-private fun uint8ArrayGet(obj: Uint8Array, index: Int): Byte = js("obj[index]")
-@Suppress("NOTHING_TO_INLINE")
-private inline operator fun Uint8Array.get(index: Int): Byte = uint8ArrayGet(this, index)
-
-@Suppress("UNUSED_PARAMETER")
-private fun uint8ArraySet(obj: Uint8Array, index: Int, value: Byte) { js("obj[index] = value") }
-@Suppress("NOTHING_TO_INLINE")
-private inline operator fun Uint8Array.set(index: Int, value: Byte) { uint8ArraySet(this, index, value) }
-
-private fun isNodeJs(): Boolean = js(
-"""
-(typeof process !== 'undefined' 
-    && process.versions != null 
-    && process.versions.node != null) ||
-(typeof window !== 'undefined' 
-    && typeof window.process !== 'undefined' 
-    && window.process.versions != null 
-    && window.process.versions.node != null)
-"""
-)
-
-private fun cryptoNode(): Crypto = js("eval('require')('crypto')")
-private fun cryptoBrowser(): Crypto = js("(window ? (window.crypto ? window.crypto : window.msCrypto) : self.crypto)")
-
-private val IS_NODE_JS: Boolean by lazy { isNodeJs() }
-private val CRYPTO: Crypto by lazy { if (IS_NODE_JS) cryptoNode() else cryptoBrowser() }
-
-//@Throws(RandomnessProcurementException::class)
+@Throws(RandomnessProcurementException::class)
 internal actual fun ByteArray.cryptoRandFill() {
     try {
-        val jsCryptoFill = if (IS_NODE_JS) CRYPTO::randomFillSync else CRYPTO::getRandomValues
+        val jsCryptoFill = if (IS_NODE_JS) JS_CRYPTO::randomFillSync else JS_CRYPTO::getRandomValues
 
         // Cannot simply use the ByteArray when calling the supplied Crypto function.
         // Must utilize Uint8Array and then copy over results (See Issue #8). Also,
@@ -71,7 +39,7 @@ internal actual fun ByteArray.cryptoRandFill() {
         // on JS Browser (See issue #9).
         if (size <= BUFFER_SIZE) {
             // 1 shot it
-            val buf = Uint8Array(size)
+            val buf = JsUint8Array(size)
             jsCryptoFill(buf)
             for (i in indices) {
                 this[i] = buf[i]
@@ -80,7 +48,7 @@ internal actual fun ByteArray.cryptoRandFill() {
             return
         }
 
-        val buf = Uint8Array(BUFFER_SIZE)
+        val buf = JsUint8Array(BUFFER_SIZE)
 
         var needed = size
         var pos = 0

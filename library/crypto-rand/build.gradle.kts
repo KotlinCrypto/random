@@ -44,23 +44,35 @@ kmpConfiguration {
 
         kotlin {
             with(sourceSets) {
-                val linuxMain = findByName("linuxMain")
-                val androidNativeMain = findByName("androidNativeMain")
-
-                if (linuxMain != null || androidNativeMain != null) {
-                    val linuxAndroidMain = maybeCreate("linuxAndroidMain").apply {
-                        dependsOn(getByName("unixMain"))
-                    }
-                    val linuxAndroidTest = maybeCreate("linuxAndroidTest").apply {
-                        dependsOn(getByName("unixTest"))
-                    }
-
-                    linuxMain?.apply { dependsOn(linuxAndroidMain) }
-                    findByName("linuxTest")?.apply { dependsOn(linuxAndroidTest) }
-
-                    androidNativeMain?.apply { dependsOn(linuxAndroidMain) }
-                    findByName("androidNativeTest")?.apply { dependsOn(linuxAndroidTest) }
+                val sets = arrayOf("js", "wasmJs").mapNotNull { name ->
+                    val main = findByName("${name}Main") ?: return@mapNotNull null
+                    main to getByName("${name}Test")
                 }
+                if (sets.isEmpty()) return@kotlin
+                val main = maybeCreate("jsWasmJsMain").apply {
+                    dependsOn(getByName("nonJvmMain"))
+                }
+                val test = maybeCreate("jsWasmJsTest").apply {
+                    dependsOn(getByName("nonJvmTest"))
+                }
+                sets.forEach { (m, t) -> m.dependsOn(main); t.dependsOn(test) }
+            }
+        }
+
+        kotlin {
+            with(sourceSets) {
+                val sets = arrayOf("linux", "androidNative").mapNotNull { name ->
+                    val main = findByName("${name}Main") ?: return@mapNotNull null
+                    main to getByName("${name}Test")
+                }
+                if (sets.isEmpty()) return@kotlin
+                val main = maybeCreate("linuxAndroidMain").apply {
+                    dependsOn(getByName("unixMain"))
+                }
+                val test = maybeCreate("linuxAndroidTest").apply {
+                    dependsOn(getByName("unixTest"))
+                }
+                sets.forEach { (m, t) -> m.dependsOn(main); t.dependsOn(test) }
             }
         }
 
