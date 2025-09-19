@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 0.6.0 (2025-09-19)
+ - Updates `kotlin` to `2.2.20` [[#46]][46]
+ - Updates `kotlincrypto.error` to `0.4.0` [[#46]][46]
+ - Lower supported `KotlinVersion` to `1.8` [[#48]][48]
+     - `wasmJs` requires a minimum `KotlinVersion` of `1.9`
+ - Commonize `js` & `wasmJs` code via common source set `jsWasmJs` [[#49]][49]
+
 ## Version 0.5.2 (2025-08-25)
  - Updates `kotlin` to `2.2.10` [[#41]][41]
  - Updates `kotlincrypto.error` to `0.3.1`
@@ -72,3 +79,6 @@
 [41]: https://github.com/KotlinCrypto/random/pull/41
 [44]: https://github.com/KotlinCrypto/random/pull/44
 [45]: https://github.com/KotlinCrypto/random/pull/45
+[46]: https://github.com/KotlinCrypto/random/pull/46
+[48]: https://github.com/KotlinCrypto/random/pull/48
+[49]: https://github.com/KotlinCrypto/random/pull/49
