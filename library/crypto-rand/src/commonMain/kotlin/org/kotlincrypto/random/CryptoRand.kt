@@ -52,7 +52,7 @@ public abstract class CryptoRand @DelicateCryptoRandApi protected constructor() 
      *  - WasmJs:
      *      - Browser: [Crypto.getRandomValues()](https://developer.mozilla.org/docs/Web/API/Crypto/getRandomValues)
      *      - Node: [Crypto.randomFillSync()](https://nodejs.org/api/crypto.html#cryptorandomfillsyncbuffer-offset-size)
-     *  - WasmWasi: [random_get](https://github.com/WebAssembly/WASI/blob/main/legacy/preview1/docs.md#random_get)
+     *  - WasmWasi: [random_get](https://github.com/WebAssembly/WASI/blob/wasi-0.1/preview1/docs.md#random_get)
      *  - Native:
      *      - Linux & Android Native targets: [getrandom(2)](https://www.man7.org/linux/man-pages/man2/getrandom.2.html)
      *        when available (Linux Kernel 3.17+ & Android API 26+), with a fallback to reading from `/dev/urandom` after
