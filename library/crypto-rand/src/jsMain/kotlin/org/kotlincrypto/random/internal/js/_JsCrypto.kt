@@ -15,9 +15,26 @@
  **/
 package org.kotlincrypto.random.internal.js
 
+import kotlin.math.min
+
 internal actual val IS_NODE_JS: Boolean by lazy { isNodeJs() }
 
 internal actual fun jsCryptoBrowser(): JsCrypto = js(CODE_JS_CRYPTO_BROWSER)
 internal actual fun jsCryptoNode(): JsCrypto = js(CODE_JS_CRYPTO_NODE)
 
 private fun isNodeJs(): Boolean = js(CODE_IS_NODE_JS)
+
+internal actual fun ByteArray.cryptoRandFill(procure: (JsUint8Array) -> Unit) {
+    val a = asJsInt8Array().asJsUint8Array()
+    if (a.length < JS_CRYPTO_MAX_FILL) return procure(a)
+
+    var remainder = size
+    var offset = 0
+    while (remainder > 0) {
+        val len = min(JS_CRYPTO_MAX_FILL, remainder)
+        val s = a.subarray(start = offset, end = offset + len)
+        procure(s)
+        offset += len
+        remainder -= len
+    }
+}

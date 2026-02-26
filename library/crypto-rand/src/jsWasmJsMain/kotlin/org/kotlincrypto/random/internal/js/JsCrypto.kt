@@ -22,6 +22,8 @@ internal external interface JsCrypto {
     fun randomFillSync(buf: JsUint8Array)
 }
 
+internal const val JS_CRYPTO_MAX_FILL: Int = 65536
+
 internal const val CODE_IS_NODE_JS: String =
 """
 (typeof process !== 'undefined' 
@@ -43,3 +45,5 @@ internal expect val IS_NODE_JS: Boolean
 
 internal expect fun jsCryptoBrowser(): JsCrypto
 internal expect fun jsCryptoNode(): JsCrypto
+
+internal expect fun ByteArray.cryptoRandFill(procure: (JsUint8Array) -> Unit)
