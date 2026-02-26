@@ -15,5 +15,8 @@
  **/
 package org.kotlincrypto.random.internal.js
 
-internal actual fun jsUint8ArrayGet(array: JsUint8Array, index: Int): Byte = js("array[index]")
-internal actual fun jsUint8ArraySet(array: JsUint8Array, index: Int, value: Byte) { js("array[index] = value") }
+internal actual fun jsUint8Array(length: Int): JsUint8Array = js(CODE_JS_NEW_UINT8_LENGTH)
+internal actual fun jsUint8Array(buffer: JsArrayBufferLike): JsUint8Array = js(CODE_JS_NEW_UINT8_BUFFER)
+
+internal actual fun jsUint8ArrayGet(array: JsUint8Array, index: Int): Short = js(CODE_JS_ARRAY_GET)
+internal actual fun jsUint8ArraySet(array: JsUint8Array, index: Int, value: Byte) { js(CODE_JS_ARRAY_SET) }

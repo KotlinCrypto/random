@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT")
+@file:Suppress("ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT", "OPT_IN_USAGE")
 
 package org.kotlincrypto.random.internal
 

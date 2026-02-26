@@ -20,12 +20,26 @@ package org.kotlincrypto.random.internal.js
 import kotlin.js.JsName
 
 @JsName("Uint8Array")
-internal open external class JsUint8Array(length: Int) {
-    fun subarray(start: Int, end: Int): JsUint8Array
+internal open external class JsUint8Array: JsTypedArrayLike {
+    override val buffer: JsArrayBufferLike
+    override val length: Int
+    override fun subarray(start: Int, end: Int): JsUint8Array
+    internal companion object
 }
 
-internal inline operator fun JsUint8Array.get(index: Int): Byte = jsUint8ArrayGet(this, index)
-internal inline operator fun JsUint8Array.set(index: Int, value: Byte) { jsUint8ArraySet(this, index, value) }
+internal inline fun JsUint8Array.Companion.new(length: Int): JsUint8Array = jsUint8Array(length)
+internal inline fun JsUint8Array.Companion.new(buffer: JsArrayBufferLike): JsUint8Array = jsUint8Array(buffer)
 
-internal expect fun jsUint8ArrayGet(array: JsUint8Array, index: Int): Byte
+internal inline operator fun JsUint8Array.get(index: Int): Byte = jsUint8ArrayGet(this, index).toByte()
+internal inline operator fun JsUint8Array.set(index: Int, value: UByte) { jsUint8ArraySet(this, index, value.toByte()) }
+
+internal inline fun JsUint8Array.asJsInt8Array(): JsInt8Array = JsInt8Array.new(buffer)
+
+internal const val CODE_JS_NEW_UINT8_LENGTH = "new Uint8Array(length)"
+internal const val CODE_JS_NEW_UINT8_BUFFER = "new Uint8Array(buffer)"
+
+internal expect fun jsUint8Array(length: Int): JsUint8Array
+internal expect fun jsUint8Array(buffer: JsArrayBufferLike): JsUint8Array
+
+internal expect fun jsUint8ArrayGet(array: JsUint8Array, index: Int): Short
 internal expect fun jsUint8ArraySet(array: JsUint8Array, index: Int, value: Byte)

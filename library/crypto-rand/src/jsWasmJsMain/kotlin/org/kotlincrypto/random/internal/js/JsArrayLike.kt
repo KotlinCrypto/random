@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 KotlinCrypto
+ * Copyright (c) 2026 KotlinCrypto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("OPT_IN_USAGE")
-
 package org.kotlincrypto.random.internal.js
 
-internal actual fun jsUint8Array(length: Int): JsUint8Array = js(CODE_JS_NEW_UINT8_LENGTH)
-internal actual fun jsUint8Array(buffer: JsArrayBufferLike): JsUint8Array = js(CODE_JS_NEW_UINT8_BUFFER)
+internal sealed external interface JsArrayBufferLike
 
-internal actual fun jsUint8ArrayGet(array: JsUint8Array, index: Int): Short = js(CODE_JS_ARRAY_GET)
-internal actual fun jsUint8ArraySet(array: JsUint8Array, index: Int, value: Byte) { js(CODE_JS_ARRAY_SET) }
+internal sealed external interface JsTypedArrayLike {
+    val buffer: JsArrayBufferLike
+    val length: Int
+    fun subarray(start: Int, end: Int): JsTypedArrayLike
+}
+
+internal const val CODE_JS_ARRAY_GET: String = "array[index]"
+internal const val CODE_JS_ARRAY_SET: String = "array[index] = value"

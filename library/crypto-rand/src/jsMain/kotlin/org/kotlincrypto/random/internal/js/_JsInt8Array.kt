@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-@file:Suppress("OPT_IN_USAGE")
+@file:Suppress("NOTHING_TO_INLINE")
 
 package org.kotlincrypto.random.internal.js
 
-internal actual fun jsUint8Array(length: Int): JsUint8Array = js(CODE_JS_NEW_UINT8_LENGTH)
-internal actual fun jsUint8Array(buffer: JsArrayBufferLike): JsUint8Array = js(CODE_JS_NEW_UINT8_BUFFER)
+import kotlin.js.unsafeCast
 
-internal actual fun jsUint8ArrayGet(array: JsUint8Array, index: Int): Short = js(CODE_JS_ARRAY_GET)
-internal actual fun jsUint8ArraySet(array: JsUint8Array, index: Int, value: Byte) { js(CODE_JS_ARRAY_SET) }
+internal actual fun jsInt8Array(length: Int): JsInt8Array = js(CODE_JS_NEW_INT8_LENGTH)
+internal actual fun jsInt8Array(buffer: JsArrayBufferLike): JsInt8Array = js(CODE_JS_NEW_INT8_BUFFER)
+
+internal actual fun jsInt8ArrayGet(array: JsInt8Array, index: Int): Byte = js(CODE_JS_ARRAY_GET)
+internal actual fun jsInt8ArraySet(array: JsInt8Array, index: Int, value: Byte) { js(CODE_JS_ARRAY_SET) }
+
+internal inline fun ByteArray.asJsInt8Array(): JsInt8Array = unsafeCast<JsInt8Array>()
