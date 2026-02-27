@@ -17,8 +17,6 @@
 
 package org.kotlincrypto.random.internal.js
 
-import kotlin.math.min
-
 internal actual val IS_NODE_JS: Boolean by lazy { isNodeJs() }
 
 internal actual fun jsCryptoBrowser(): JsCrypto = js(CODE_JS_CRYPTO_BROWSER)
@@ -32,7 +30,7 @@ internal actual fun ByteArray.cryptoRandFill(procure: (JsUint8Array) -> Unit) {
     // Kotlin/WasmJs does not provide access to ByteArray.storage
     // (i.e. the WasmByteArray), so we must always use a buffer and
     // copy back and forth.
-    val buf = JsUint8Array.new(length = min(size, BUFFER_SIZE))
+    val buf = JsUint8Array.new(length = minOf(size, BUFFER_SIZE))
 
     try {
         var remainder = size
